@@ -93,9 +93,13 @@ jobs:
           git config --global user.email "deploy@cloudspree.cz"
       - name: install jq
         run: |
-          apt-get update && apt-get install -y jq
+          cd deploy
+          curl -s -Lo jq "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"
+          chmod +x jq
       - name: update version
         run: |
           cd deploy
-          jq '."${{ env.APPLICATION_NAME }}"="${{ github.sha }}"' versions.json
+          ./jq '."${{ env.APPLICATION_NAME }}"="${{ github.sha }}"' versions.json
+          git add versions.json
+          git commit -m "chore(deploy): update ${{ env.APPLICATION_NAME }} version"
 
