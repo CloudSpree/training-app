@@ -27,7 +27,7 @@ jobs:
           path: main
           retention-days: 1
 
-  build-contember-admin-docker:
+  build-docker:
     needs:
       - build-go
     runs-on: ubuntu-latest
