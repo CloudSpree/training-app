@@ -87,5 +87,15 @@ jobs:
           path: deploy/
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           ssh-strict: 'false'
-      - run: |
-          git remote show
+      - name: configure git
+        run: |
+          git config --global user.name "Deployment bot"
+          git config --global user.email "deploy@cloudspree.cz"
+      - name: install jq
+        run: |
+          apt-get update && apt-get install -y jq
+      - name: update version
+        run: |
+          cd deploy
+          jq '."${{ env.APPLICATION_NAME }}"="${{ github.sha }}"' versions.json
+
