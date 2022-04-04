@@ -75,3 +75,17 @@ jobs:
             ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_REGISTRY_PREFIX }}/${{ env.APPLICATION_NAME }}:${{ github.sha }}
           build-args:
             VERSION=${{ github.sha }}
+
+  deploy:
+    needs:
+      - build-docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          path: deploy/
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          ssh-strict: 'false'
+      - run: |
+          git remote show
