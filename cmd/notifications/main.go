@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/lightstep/otel-launcher-go/launcher"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 	"net/http"
 	"os"
 )
@@ -26,6 +29,8 @@ func main() {
 	)
 	defer ls.Shutdown()
 
+	tracer := otel.Tracer("main")
+
 	// Echo instance
 	e := echo.New()
 
@@ -34,13 +39,17 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/", hello)
+	e.GET("/api/v1/notifications", hello(tracer))
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
 // Handler
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "hello from notifications!")
+func hello(tracer trace.Tracer) func(c echo.Context) error {
+	return func(c echo.Context) error {
+		_, span := tracer.Start(context.Background(), "hello")
+		defer span.End()
+		return c.String(http.StatusOK, "hello from notifications!")
+	}
 }
