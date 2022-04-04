@@ -100,7 +100,9 @@ jobs:
       - name: update version
         run: |
           cd deploy
-          ./jq '."${{ env.APPLICATION_NAME }}"="${{ github.sha }}"' versions.json
+          ./jq '."${{ env.APPLICATION_NAME }}"="${{ github.sha }}"' versions.json | tee /tmp/versions.json
+          cat /tmp/versions.json > versions.json
+          PAGER="" git diff
           git add versions.json
           git commit -m "chore(deploy): update ${{ env.APPLICATION_NAME }} version"
-
+          git push origin main
