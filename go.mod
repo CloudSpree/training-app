@@ -5,6 +5,8 @@ go 1.17
 require (
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/lightstep/otel-launcher-go v1.5.1
+	go.opentelemetry.io/otel v1.5.0
+	go.opentelemetry.io/otel/trace v1.5.0
 )
 
 require (
@@ -32,7 +34,6 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.29.0 // indirect
 	go.opentelemetry.io/contrib/propagators/b3 v1.4.0 // indirect
 	go.opentelemetry.io/contrib/propagators/ot v1.4.0 // indirect
-	go.opentelemetry.io/otel v1.5.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/internal/retry v1.5.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric v0.27.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.27.0 // indirect
@@ -42,7 +43,6 @@ require (
 	go.opentelemetry.io/otel/metric v0.27.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.5.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v0.27.0 // indirect
-	go.opentelemetry.io/otel/trace v1.5.0 // indirect
 	go.opentelemetry.io/proto/otlp v0.12.0 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20220111093109-d55c255bac03 // indirect
