@@ -1,0 +1,56 @@
+name: 'Test and Build'
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CMD_PATH: cmd/notifications/main.go
+  CONTAINER_REGISTRY: 'registry.digitalocean.com'
+
+jobs:
+  build-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.18'
+      - name: show go version
+        run: go version
+      - name: build
+        run: go build -o main ${{ env.CMD_PATH }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: main
+          retention-days: 1
+
+  build-contember-admin-docker:
+    needs:
+      - build-go
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: app
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: login to digital ocean
+        run: |
+          docker login \
+            -u ${{ secrets.DIGITAL_OCEAN_TOKEN }} \
+            -p ${{ secrets.DIGITAL_OCEAN_TOKEN }} \
+            ${{ env.CONTAINER_REGISTRY }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          file: docker/notifications/Dockerfile
+          context: ./
+          push: true
+          tags: |
+            ${{ env.CONTAINER_REGISTRY }}/cloudspree/notifications:${{ github.sha }}
+          build-args:
+            VERSION=${{ github.sha }}
