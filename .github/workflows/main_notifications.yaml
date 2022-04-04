@@ -87,6 +87,7 @@ jobs:
           path: deploy/
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           ssh-strict: 'false'
+          repository: CloudSpree/training-deployment
       - name: configure git
         run: |
           git config --global user.name "Deployment bot"
