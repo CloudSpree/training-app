@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/CloudSpree/training-app/pkg/span"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/lightstep/otel-launcher-go/launcher"
@@ -23,9 +24,6 @@ func main() {
 	ls := launcher.ConfigureOpentelemetry(
 		launcher.WithServiceName("notifications"),
 		launcher.WithAccessToken(lightstepToken),
-		launcher.WithResourceAttributes(map[string]string{
-			"environment": environmentName,
-		}),
 	)
 	defer ls.Shutdown()
 
@@ -48,8 +46,9 @@ func main() {
 // Handler
 func hello(tracer trace.Tracer) func(c echo.Context) error {
 	return func(c echo.Context) error {
-		_, span := tracer.Start(context.Background(), "hello")
-		defer span.End()
+		_, s := span.WithEnvironment(context.Background(), tracer, environmentName, "hello")
+		defer s.End()
+
 		return c.String(http.StatusOK, "hello from notifications!")
 	}
 }
