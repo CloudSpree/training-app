@@ -1,18 +1,18 @@
-name: '[notifications] Test and Build'
+name: '[settlements] Test and Build'
 
 on:
   push:
     branches:
       - main
     paths:
-      - cmd/notifications/**
-      - .github/workflows/main_notifications.yaml
-      - docker/notifications/**
+      - cmd/settlements/**
+      - .github/workflows/main_settlements.yaml
+      - docker/settlements/**
 
 env:
   CONTAINER_REGISTRY: 'registry.digitalocean.com'
   CONTAINER_REGISTRY_PREFIX: cloudspree
-  APPLICATION_NAME: 'notifications'
+  APPLICATION_NAME: 'settlements'
 
 jobs:
   test:
