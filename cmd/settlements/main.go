@@ -25,5 +25,3 @@ func main() {
 func hello(c echo.Context) error {
 	return c.String(http.StatusOK, "hello from settlements!")
 }
-
-// dummy
