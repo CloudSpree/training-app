@@ -15,7 +15,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/", hello)
+	e.GET("/api/v1/settlements", hello)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
