@@ -52,3 +52,5 @@ func hello(tracer trace.Tracer) func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello from notifications!")
 	}
 }
+
+// dummy
