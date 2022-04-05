@@ -23,7 +23,7 @@ func main() {
 
 // Handler
 func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "hello from settlements!")
+	return c.String(http.StatusOK, "hello from new settlements!")
 }
 
 // dummy
