@@ -38,6 +38,7 @@ func main() {
 
 	// Routes
 	e.GET("/api/v1/notifications", hello(tracer))
+	e.GET("/_health/ready", probe(tracer))
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
@@ -53,4 +54,8 @@ func hello(tracer trace.Tracer) func(c echo.Context) error {
 	}
 }
 
-// dummy
+func probe(tracer trace.Tracer) func(c echo.Context) error {
+	return func(c echo.Context) error {
+		return c.String(http.StatusOK, "ok")
+	}
+}
