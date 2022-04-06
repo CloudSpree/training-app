@@ -75,3 +75,34 @@ jobs:
             ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_REGISTRY_PREFIX }}/${{ env.APPLICATION_NAME }}:${{ github.sha }}
           build-args:
             VERSION=${{ github.sha }}
+
+  deploy:
+    needs:
+      - build-docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          path: deploy/
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          ssh-strict: 'false'
+          repository: CloudSpree/training-deployment
+      - name: configure git
+        run: |
+          git config --global user.name "Deployment bot"
+          git config --global user.email "deploy@cloudspree.cz"
+      - name: install jq
+        run: |
+          cd deploy
+          curl -s -Lo jq "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"
+          chmod +x jq
+      - name: update version
+        run: |
+          cd deploy
+          ./jq '."${{ env.APPLICATION_NAME }}"="${{ github.sha }}"' versions.json | tee /tmp/versions.json
+          cat /tmp/versions.json > versions.json
+          PAGER="" git diff
+          git add versions.json
+          git commit -m "chore(deploy): update ${{ env.APPLICATION_NAME }} version"
+          git push origin main
