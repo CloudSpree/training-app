@@ -58,3 +58,5 @@ func probe(tracer trace.Tracer) func(c echo.Context) error {
 		return c.String(http.StatusOK, "ok")
 	}
 }
+
+// dummy
