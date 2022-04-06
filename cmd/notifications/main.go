@@ -49,7 +49,6 @@ func hello(tracer trace.Tracer) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		_, s := span.WithEnvironment(context.Background(), tracer, environmentName, "hello")
 		defer s.End()
-
 		return c.String(http.StatusOK, "hello from notifications!")
 	}
 }
