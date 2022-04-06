@@ -14,6 +14,7 @@ env:
   CONTAINER_REGISTRY_PREFIX: cloudspree
   APPLICATION_NAME: 'provider'
 
+
 jobs:
   test:
     runs-on: ubuntu-latest
