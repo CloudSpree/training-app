@@ -37,7 +37,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/api/v1/notifications", hello(tracer))
+	e.GET("/api/v1/settlements", hello(tracer))
 	e.GET("/_health/ready", probe(tracer))
 
 	// Start server
@@ -49,7 +49,7 @@ func hello(tracer trace.Tracer) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		_, s := span.WithEnvironment(context.Background(), tracer, environmentName, "hello")
 		defer s.End()
-		return c.String(http.StatusOK, "hello from settlements!")
+		return c.String(http.StatusOK, "hello from new settlements!")
 	}
 }
 
